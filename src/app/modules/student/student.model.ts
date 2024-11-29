@@ -1,12 +1,14 @@
 import { Schema, model } from 'mongoose';
 import {
-  Student,
-  UserName,
-  LocalGuardian,
-  Guardian,
+  TStudent,
+  TUserName,
+  TLocalGuardian,
+  TGuardian,
+  studentModel,
+  studentMethods,
 } from './student.interface';
 
-const UserNameSchema = new Schema<UserName>({
+const UserNameSchema = new Schema<TUserName>({
   firstName: {
     type: 'string',
     required: [true, 'this name part is required'],
@@ -23,7 +25,7 @@ const UserNameSchema = new Schema<UserName>({
   lastName: { type: 'string', required: [true, 'this name part is required'] },
 });
 
-const guardianSchema = new Schema<Guardian>({
+const guardianSchema = new Schema<TGuardian>({
   fatherName: { type: 'string', required: true },
   fatherOccupation: { type: 'string', required: true },
   fatherContactNo: { type: 'string', required: true },
@@ -32,18 +34,17 @@ const guardianSchema = new Schema<Guardian>({
   motherContactNo: { type: 'string', required: true },
 });
 
-const localGuardianSchema = new Schema<LocalGuardian>({
+const localGuardianSchema = new Schema<TLocalGuardian>({
   name: { type: 'string', required: true },
   occupation: { type: 'string', required: true },
   contactNo: { type: 'string', required: true },
   address: { type: 'string', required: true },
 });
 
-const studentSchema = new Schema<Student>({
+const studentSchema = new Schema<TStudent, studentModel, studentMethods>({
   id: {
     type: 'string',
     required: [true, 'this data is required'],
-    unique: true,
   },
   name: { type: UserNameSchema, required: [true, 'this data is required'] },
   gender: {
@@ -75,7 +76,7 @@ const studentSchema = new Schema<Student>({
     required: true,
   },
   presentAddress: { type: 'string', required: [true, 'this data is required'] },
-  permanentAddres: {
+  permanentAddress: {
     type: 'string',
     required: [true, 'this data is required'],
   },
@@ -99,4 +100,18 @@ const studentSchema = new Schema<Student>({
   },
 });
 
-export const studentModel = model<Student>('student', studentSchema);
+//custom static method
+
+studentSchema.methods.isUserExists = async function (id: string) {
+  const existingUser = await student.findOne({ id });
+  return existingUser;
+};
+
+//custom instance method
+
+// studentSchema.methods.isUserExists = async function (id: string) {
+//   const existingUser = await student.findOne({ id });
+//   return existingUser;
+// };
+
+export const student = model<TStudent, studentModel>('student', studentSchema);

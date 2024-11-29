@@ -60,7 +60,7 @@ const StudentValidationZodSchema = z.object({
     invalid_type_error: 'Invalid blood group',
   }),
   presentAddress: z.string().min(1, { message: 'Present address is required' }),
-  permanentAddres: z
+  permanentAddress: z
     .string()
     .min(1, { message: 'Permanent address is required' }),
   guardian: GuardianValidationSchema,
