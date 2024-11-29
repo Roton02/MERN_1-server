@@ -40,14 +40,13 @@ const LocalGuardianValidationSchema = z.object({
 const StudentValidationZodSchema = z.object({
   id: z.string().min(1, { message: 'Student ID is required' }),
   name: UserNameValidationSchema,
+  password: z.string().min(4, { message: 'password be a 4 charecter' }),
   gender: z.enum(['male', 'female'], {
     invalid_type_error: 'Gender must be either male or female',
   }),
-  dateOfBirth: z
-    .string()
-    .refine((value) => !isNaN(Date.parse(value)), {
-      message: 'Date of birth must be a valid ISO date',
-    }),
+  dateOfBirth: z.string().refine((value) => !isNaN(Date.parse(value)), {
+    message: 'Date of birth must be a valid ISO date',
+  }),
   email: z.string().email({ message: 'Email must be a valid email address' }),
   contactNo: z
     .string()

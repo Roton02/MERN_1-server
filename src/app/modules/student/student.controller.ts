@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from 'express';
 import { studentService } from './student.services';
 import StudentValidationSchema from './student.validation';

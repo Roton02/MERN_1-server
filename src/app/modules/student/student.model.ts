@@ -1,12 +1,15 @@
+/* eslint-disable @typescript-eslint/no-this-alias */
 import { Schema, model } from 'mongoose';
+import bcrypt from 'bcryptjs';
 import {
   TStudent,
   TUserName,
   TLocalGuardian,
   TGuardian,
-  studentModel,
   studentMethods,
+  studentModel,
 } from './student.interface';
+import config from '../../config';
 
 const UserNameSchema = new Schema<TUserName>({
   firstName: {
@@ -41,12 +44,17 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
   address: { type: 'string', required: true },
 });
 
-const studentSchema = new Schema<TStudent, studentModel, studentMethods>({
+const studentSchema = new Schema<TStudent, studentMethods>({
   id: {
     type: 'string',
     required: [true, 'this data is required'],
+    unique: true,
   },
   name: { type: UserNameSchema, required: [true, 'this data is required'] },
+  password: {
+    type: String,
+    required: [true, 'password is required '],
+  },
   gender: {
     type: 'string',
     enum: ['male', 'female'],
@@ -113,5 +121,12 @@ studentSchema.methods.isUserExists = async function (id: string) {
 //   const existingUser = await student.findOne({ id });
 //   return existingUser;
 // };
+
+studentSchema.pre('save', async function () {
+  const user = this;
+  user.password = await bcrypt.hash(user.password, Number(config.bcrypt_salt));
+});
+
+studentSchema.post('save', function () {});
 
 export const student = model<TStudent, studentModel>('student', studentSchema);
