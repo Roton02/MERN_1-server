@@ -11,7 +11,7 @@ const userSchemaModel = new Schema<Tuser>({
     required: true,
   },
   needsPasswordChange: {
-    type: String,
+    type: Boolean,
     required: true,
   },
   role: {
@@ -24,8 +24,10 @@ const userSchemaModel = new Schema<Tuser>({
   },
   isDeleted: {
     type: Boolean,
-    required: true,
+    default : false
   },
+}, {
+  timestamps : true 
 });
 
 const user = model<Tuser>('User', userSchemaModel);
