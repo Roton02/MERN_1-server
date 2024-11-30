@@ -44,73 +44,84 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
   address: { type: 'string', required: true },
 });
 
-const studentSchema = new Schema<TStudent, studentMethods>({
-  id: {
-    type: 'string',
-    required: [true, 'this data is required'],
-    unique: true,
-  },
-  name: { type: UserNameSchema, required: [true, 'this data is required'] },
-  password: {
-    type: String,
-    required: [true, 'password is required '],
-  },
-  gender: {
-    type: 'string',
-    enum: ['male', 'female'],
-    required: [true, 'this data is required'],
-  },
-  dateOfBirth: {
-    type: 'string',
-    required: [true, 'date of birth is required'],
-  },
-  email: { type: 'string', required: [true, 'this data is required'] },
-  contactNo: {
-    type: 'string',
-    trim: true,
-    maxlength: [10, 'max lenth is longer then 10 characters'],
-    required: [true, 'this data is required'],
-  },
-  emergencyContactNo: {
-    type: 'string',
-    required: [true, 'this data is required'],
-  },
-  bloodGroup: {
-    type: 'string',
-    enum: {
-      values: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
-      message: '{VALUE} is Incorrect',
+const studentSchema = new Schema<TStudent, studentMethods>(
+  {
+    id: {
+      type: 'string',
+      required: [true, 'this data is required'],
+      unique: true,
     },
-    required: true,
-  },
-  presentAddress: { type: 'string', required: [true, 'this data is required'] },
-  permanentAddress: {
-    type: 'string',
-    required: [true, 'this data is required'],
-  },
-  guardian: {
-    type: guardianSchema,
-    required: [true, 'this data is required'],
-  },
-  localGuardian: {
-    type: localGuardianSchema,
-    required: [true, 'this data is required'],
-  },
-  profileImg: { type: 'string' },
-  isActive: {
-    type: 'string',
-    enum: {
-      values: ['active', 'blocked'],
-      message: 'isActive is required',
+    name: { type: UserNameSchema, required: [true, 'this data is required'] },
+    password: {
+      type: String,
+      required: [true, 'password is required '],
     },
-    required: true,
-    default: 'active',
+    gender: {
+      type: 'string',
+      enum: ['male', 'female'],
+      required: [true, 'this data is required'],
+    },
+    dateOfBirth: {
+      type: 'string',
+      required: [true, 'date of birth is required'],
+    },
+    email: { type: 'string', required: [true, 'this data is required'] },
+    contactNo: {
+      type: 'string',
+      trim: true,
+      maxlength: [10, 'max lenth is longer then 10 characters'],
+      required: [true, 'this data is required'],
+    },
+    emergencyContactNo: {
+      type: 'string',
+      required: [true, 'this data is required'],
+    },
+    bloodGroup: {
+      type: 'string',
+      enum: {
+        values: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+        message: '{VALUE} is Incorrect',
+      },
+      required: true,
+    },
+    presentAddress: {
+      type: 'string',
+      required: [true, 'this data is required'],
+    },
+    permanentAddress: {
+      type: 'string',
+      required: [true, 'this data is required'],
+    },
+    guardian: {
+      type: guardianSchema,
+      required: [true, 'this data is required'],
+    },
+    localGuardian: {
+      type: localGuardianSchema,
+      required: [true, 'this data is required'],
+    },
+    profileImg: { type: 'string' },
+    isActive: {
+      type: 'string',
+      enum: {
+        values: ['active', 'blocked'],
+        message: 'isActive is required',
+      },
+      required: true,
+      default: 'active',
+    },
+    isDeleted: {
+      type: 'boolean',
+      default: false,
+    },
   },
-  isDeleted: {
-    type: 'boolean',
-    default: false,
+  {
+    timestamps: true,
+    toJSON: {
+      virtuals: true,
+    },
   },
-});
+);
 
 //custom static method
 
@@ -142,5 +153,15 @@ studentSchema.pre('find', async function (next) {
   // this.find({ isDeleted: { $ne: true } });
 
   next();
+});
+studentSchema.pre('findOne', async function (next) {
+  // this.where({ isDeleted: false });
+  this.find({ isDeleted: { $ne: true } });
+
+  next();
+});
+
+studentSchema.virtual('fullName').get(function () {
+  return `${this.name.firstName} ${this.name.middleName || ''} ${this.name.lastName}`;
 });
 export const student = model<TStudent, studentModel>('student', studentSchema);
