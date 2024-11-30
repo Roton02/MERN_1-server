@@ -8,7 +8,7 @@ const createStudent = async (req: Request, res: Response) => {
     const { student } = req.body;
 
     const validateResult = StudentValidationSchema.parse(student);
-    // console.log({error}, {value}); 
+    // console.log({error}, {value});
     const result = await studentService.createStudentIntoDB(validateResult);
 
     res.status(200).json({
@@ -16,8 +16,8 @@ const createStudent = async (req: Request, res: Response) => {
       message: 'Student created successfully',
       data: result,
     });
-  } catch (error : any) {
-    res.status(200).json({
+  } catch (error: any) {
+    res.status(500).json({
       success: false,
       message: error.message,
       data: error,
@@ -31,11 +31,15 @@ const getStudentController = async (req: Request, res: Response) => {
     const result = await studentService.getAllStudentFromDB();
     res.status(200).json({
       success: true,
-      message: 'Student retrived successfully',
+      message: 'Student retrieved successfully',
       data: result,
     });
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+      data: error,
+    });
   }
 };
 
@@ -49,8 +53,30 @@ const getAStudentByStudentId = async (req: Request, res: Response) => {
       message: 'Student is retrive successfully',
       data: result,
     });
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+      data: error,
+    });
+  }
+};
+
+const deleteStudent = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    const result = await studentService.deleteStudentFromDB(id);
+    res.status(200).json({
+      success: true,
+      message: 'Student is retrive successfully',
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+      data: error,
+    });
   }
 };
 
@@ -58,4 +84,5 @@ export const studentControllers = {
   createStudent,
   getStudentController,
   getAStudentByStudentId,
+  deleteStudent,
 };

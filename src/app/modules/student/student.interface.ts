@@ -26,7 +26,7 @@ export type TLocalGuardian = {
 export type TStudent = {
   id: string;
   name: TUserName;
-  password: string,
+  password: string;
   gender: 'male' | 'female';
   dateOfBirth?: string;
   email: string;
@@ -39,6 +39,7 @@ export type TStudent = {
   localGuardian: TLocalGuardian;
   profileImg?: string;
   isActive: 'active' | 'blocked';
+  isDeleted: boolean;
 };
 
 //custom static method
@@ -58,4 +59,3 @@ export type studentModel = Model<
   Record<string, never>,
   studentMethods
 >;
-

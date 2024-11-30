@@ -25,8 +25,14 @@ const getAStudentByStudentId = async (studentId: string) => {
   return result;
 };
 
+const deleteStudentFromDB = async (id: string) => {
+  const result = await student.updateOne({ id }, { isDeleted: true });
+  return result;
+};
+
 export const studentService = {
   createStudentIntoDB,
   getAllStudentFromDB,
   getAStudentByStudentId,
+  deleteStudentFromDB,
 };

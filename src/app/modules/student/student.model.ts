@@ -106,6 +106,10 @@ const studentSchema = new Schema<TStudent, studentMethods>({
     required: true,
     default: 'active',
   },
+  isDeleted: {
+    type: 'boolean',
+    default: false,
+  },
 });
 
 //custom static method
@@ -127,6 +131,16 @@ studentSchema.pre('save', async function () {
   user.password = await bcrypt.hash(user.password, Number(config.bcrypt_salt));
 });
 
-studentSchema.post('save', function () {});
+studentSchema.post('save', function (doc, next) {
+  doc.password = '';
 
+  next();
+});
+
+studentSchema.pre('find', async function (next) {
+  this.where({ isDeleted: false });
+  // this.find({ isDeleted: { $ne: true } });
+
+  next();
+});
 export const student = model<TStudent, studentModel>('student', studentSchema);
