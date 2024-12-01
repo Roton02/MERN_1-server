@@ -1,10 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { studentService } from './student.services';
 
-
 //get-AlL-Student
-const getStudentController = async (req: Request, res: Response) => {
+const getStudentController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const result = await studentService.getAllStudentFromDB();
     res.status(200).json({
@@ -13,16 +16,16 @@ const getStudentController = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-      data: error,
-    });
+    next(error);
   }
 };
 
 //get A student filtered by studentId
-const getAStudentByStudentId = async (req: Request, res: Response) => {
+const getAStudentByStudentId = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const studentId = req.params.id;
     const result = await studentService.getAStudentByStudentId(studentId);
@@ -32,15 +35,15 @@ const getAStudentByStudentId = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-      data: error,
-    });
+    next(error);
   }
 };
 
-const deleteStudent = async (req: Request, res: Response) => {
+const deleteStudent = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const id = req.params.id;
     const result = await studentService.deleteStudentFromDB(id);
@@ -50,11 +53,7 @@ const deleteStudent = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-      data: error,
-    });
+    next(error);
   }
 };
 

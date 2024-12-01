@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 // import StudentValidationZodSchema from '../student/student.validation';
 import { userServices } from './user.services';
 
-const createStudent = async (req: Request, res: Response) => {
+const createStudent = async (req: Request, res: Response , next:NextFunction) => {
   try {
     const { password, student } = req.body;
 
@@ -15,12 +15,8 @@ const createStudent = async (req: Request, res: Response) => {
       message: 'Student created successfully',
       data: result,
     });
-  } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-      data: error,
-    });
+  } catch (error) {
+    next(error)
   }
 };
 
