@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 import { Schema, model } from 'mongoose';
-import bcrypt from 'bcryptjs';
 import {
   TStudent,
   TUserName,
@@ -9,7 +8,6 @@ import {
   studentMethods,
   studentModel,
 } from './student.interface';
-import config from '../../config';
 
 const UserNameSchema = new Schema<TUserName>({
   firstName: {
@@ -58,10 +56,6 @@ const studentSchema = new Schema<TStudent, studentMethods>(
       ref: 'user',
     },
     name: { type: UserNameSchema, required: [true, 'this data is required'] },
-    password: {
-      type: String,
-      required: [true, 'password is required '],
-    },
     gender: {
       type: 'string',
       enum: ['male', 'female'],
@@ -134,16 +128,6 @@ studentSchema.methods.isUserExists = async function (id: string) {
 //   return existingUser;
 // };
 
-studentSchema.pre('save', async function () {
-  const user = this;
-  user.password = await bcrypt.hash(user.password, Number(config.bcrypt_salt));
-});
-
-studentSchema.post('save', function (doc, next) {
-  doc.password = '';
-
-  next();
-});
 
 studentSchema.pre('find', async function (next) {
   this.where({ isDeleted: false });
