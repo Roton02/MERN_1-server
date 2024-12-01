@@ -6,7 +6,7 @@ import { NextFunction, Request, Response } from 'express';
 const globalErrHandler = (
   err: any,
   req: Request,
-  res:  Record<string, any>,
+  res: Record<string, any>,
   next: NextFunction,
 ) => {
   return res.status(500).json({
@@ -16,4 +16,4 @@ const globalErrHandler = (
   });
 };
 
-export default globalErrHandler
+export default globalErrHandler;
