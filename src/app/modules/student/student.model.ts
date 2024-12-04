@@ -13,14 +13,6 @@ const UserNameSchema = new Schema<TUserName>({
   firstName: {
     type: 'string',
     required: [true, 'this name part is required'],
-    // validate: {
-    //   validator:function(value: string) {
-    //     const firstValueCapitalized =
-    //       value.charAt(0).toUpperCase() + value.slice(1);
-    //     return firstValueCapitalized === value;
-    //   },
-    //   message: '{VALUE} is not capitalized',
-    // },
   },
   middleName: { type: 'string' },
   lastName: { type: 'string', required: [true, 'this name part is required'] },
@@ -62,7 +54,7 @@ const studentSchema = new Schema<TStudent, studentMethods>(
       required: [true, 'this data is required'],
     },
     dateOfBirth: {
-      type: 'string',
+      type: Date,
       required: [true, 'date of birth is required'],
     },
     email: { type: 'string', required: [true, 'this data is required'] },
@@ -127,7 +119,6 @@ studentSchema.methods.isUserExists = async function (id: string) {
 //   const existingUser = await student.findOne({ id });
 //   return existingUser;
 // };
-
 
 studentSchema.pre('find', async function (next) {
   this.where({ isDeleted: false });

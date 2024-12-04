@@ -1,19 +1,14 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { NextFunction, Request, Response } from 'express';
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { NextFunction, Request, RequestHandler, Response } from 'express';
 // import StudentValidationZodSchema from '../student/student.validation';
 import { userServices } from './user.services';
 import sendResponse from '../../utils/sendResponse';
+import catchAsync from '../../utils/catchAsync';
 
-const createStudent = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
+const createStudent = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
     const { password, student } = req.body;
-
-    //   const validateResult = StudentValidationZodSchema.parse(student);
-    // console.log({error}, {value});
     const result = await userServices.createStudentIntoDB(password, student);
     sendResponse(res, {
       statusCode: 200,
@@ -21,10 +16,8 @@ const createStudent = async (
       message: 'Student create Successfully ',
       data: result,
     });
-  } catch (error) {
-    next(error);
-  }
-};
+  },
+);
 
 export const userControllers = {
   createStudent,

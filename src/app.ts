@@ -9,7 +9,7 @@ const app: Application = express();
 app.use(express.json());
 app.use(cors());
 
-//aplication route
+//application route
 app.use('/api/v1', router);
 
 app.use(globalErrHandler);
