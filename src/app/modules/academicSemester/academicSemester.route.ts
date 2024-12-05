@@ -17,13 +17,14 @@ router.get(
 
 router.post(
   '/create-academic-semester',
-  validation(
-    academicSemesterValidation.createAcademicSemesterValidationZodSchema,
-  ),
+
   AcademicSemesterControllers.createAcademicSemester,
 );
 router.patch(
   '/update-academic-semester/:semesterId',
+  validation(
+    academicSemesterValidation.updateAcademicSemesterValidationZodSchema,
+  ),
   AcademicSemesterControllers.updateAcademicSemester,
 );
 

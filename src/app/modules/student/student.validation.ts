@@ -45,7 +45,7 @@ const CreateStudentValidationZodSchema = z.object({
       gender: z.enum(['male', 'female'], {
         invalid_type_error: 'Gender must be either male or female',
       }),
-      dateOfBirth: z.date(),
+      dateOfBirth: z.string(),
       email: z
         .string()
         .email({ message: 'Email must be a valid email address' }),
@@ -71,6 +71,7 @@ const CreateStudentValidationZodSchema = z.object({
         .string()
         .url({ message: 'Profile image must be a valid URI' })
         .optional(),
+      admissionSemester: z.string(),
     }),
   }),
 });

@@ -23,7 +23,17 @@ const updateAcademicSemesterIntroDB = async (
   id: string,
   payload: Partial<TAcademicSemester>,
 ) => {
-  const result = await academicSemester.findByIdAndUpdate(id, payload , {new:true , runValidators :true});
+  if (
+    payload.name &&
+    payload.code &&
+    academicSemesterNameCode[payload.name] !== payload.code
+  ) {
+    throw new Error('Invalid semester code ');
+  }
+  const result = await academicSemester.findByIdAndUpdate(id, payload, {
+    new: true,
+    runValidators: true,
+  });
   return result;
 };
 

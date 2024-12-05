@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-this-alias */
 import { Schema, model } from 'mongoose';
 import {
   TStudent,
@@ -93,6 +92,10 @@ const studentSchema = new Schema<TStudent, studentMethods>(
       required: [true, 'this data is required'],
     },
     profileImg: { type: 'string' },
+    admissionSemester: {
+      type: Schema.Types.ObjectId,
+      ref: 'academicSemester',
+    },
     isDeleted: {
       type: 'boolean',
       default: false,

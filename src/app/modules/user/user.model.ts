@@ -4,12 +4,12 @@ import { Tuser } from './user.interface';
 import config from '../../config';
 import bcrypt from 'bcryptjs';
 
-
 const userSchemaModel = new Schema<Tuser>(
   {
     id: {
       type: String,
       required: true,
+      unique: true,
     },
     password: {
       type: String,
@@ -20,11 +20,11 @@ const userSchemaModel = new Schema<Tuser>(
       default: true,
     },
     role: {
-      type:String ,
+      type: String,
       enum: ['admin', 'student', 'faculty'],
     },
     status: {
-      type:String ,
+      type: String,
       enum: ['in-progress', 'blocked'],
       default: 'in-progress',
     },
@@ -48,7 +48,6 @@ userSchemaModel.post('save', function (doc, next) {
 
   next();
 });
-
 
 const user = model<Tuser>('User', userSchemaModel);
 
