@@ -49,6 +49,12 @@ const CreateStudentValidationZodSchema = z.object({
       email: z
         .string()
         .email({ message: 'Email must be a valid email address' }),
+      // .refine(async (email) => {
+      //   const existingEmail = await student.findOne({ email: email });
+      //   if (existingEmail) {
+      //     throw new Error('email is exist already ');
+      //   }
+      // }),
       contactNo: z
         .string()
         .max(10, { message: 'Contact number must be 10 characters long' })
