@@ -16,12 +16,12 @@ router.patch(
   academicDepartmentControllers.updateAcademicDepartment,
 );
 router.get(
-  '/get-All-academicDepartment/:AcademicDepartmentId',
-  academicDepartmentControllers.getAllAcademicDepartment,
+  '/get-single-academicDepartment/:AcademicDepartmentId',
+  academicDepartmentControllers.getSingleAcademicDepartment,
 );
 router.get(
   '/get-All-academicDepartment',
-  academicDepartmentControllers.getSingleAcademicDepartment,
+  academicDepartmentControllers.getAllAcademicDepartment,
 );
 
-export const academicFacultiesRoute = router;
+export const academicDepartmentRoute = router;
