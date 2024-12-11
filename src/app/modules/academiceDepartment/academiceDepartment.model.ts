@@ -1,4 +1,4 @@
-import { model, Schema } from 'mongoose';
+import mongoose, { model, Schema } from 'mongoose';
 import { TAcademicDepartment } from './academicDepartment.interface';
 
 const academicDepartmentSchemaModel = new Schema<TAcademicDepartment>({
@@ -13,7 +13,7 @@ const academicDepartmentSchemaModel = new Schema<TAcademicDepartment>({
 });
 
 academicDepartmentSchemaModel.pre('save', async function (next) {
-  const isExistDepartmentName = await academicDepartmentModel.findOne({
+  const isExistDepartmentName = await academicDepartment.findOne({
     name: this.name,
   });
   if (isExistDepartmentName) {
@@ -22,27 +22,29 @@ academicDepartmentSchemaModel.pre('save', async function (next) {
   next();
 });
 
-// academicDepartmentSchemaModel.pre('findOne', async function (next) {
-//   const query = this.getQuery();
-//   const isExistDepartment = await academicDepartmentModel.findOne(query);
-//   if (!isExistDepartment) {
-//     throw new Error('Department is empty ');
-//   }
-//   next();
-// });
+academicDepartmentSchemaModel.pre('findOne', async function (next) {
+  const query = this.getQuery();
+  const id = new mongoose.Types.ObjectId(query._id);
+  const isExistDepartment = await this.model.collection.findOne({
+    _id: id,
+  });
+  if (!isExistDepartment) {
+    throw new Error('Department is empty ');
+  }
+  next();
+});
 
-// academicDepartmentSchemaModel.pre('findOneAndUpdate', async function (next) {
-//   const query = this.getQuery();
-//   const isExistDepartment = await academicDepartmentModel.findOne({
-//     _id: query._id,
-//   });
-//   if (!isExistDepartment) {
-//     throw new Error('Department is Null');
-//   }
-//   next();
-// });
+academicDepartmentSchemaModel.pre('findOneAndUpdate', async function (next) {
+  const query = this.getQuery();
+  const id = new mongoose.Types.ObjectId(query._id);
+  const isExistDepartment = await this.model.collection.findOne({ _id: id });
+  if (!isExistDepartment) {
+    throw new Error("Department is does'nt exist");
+  }
+  next();
+});
 
-export const academicDepartmentModel = model<TAcademicDepartment>(
+export const academicDepartment = model<TAcademicDepartment>(
   'academicDepartment',
   academicDepartmentSchemaModel,
 );

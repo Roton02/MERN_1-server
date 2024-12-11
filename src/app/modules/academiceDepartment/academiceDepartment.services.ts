@@ -1,21 +1,20 @@
 import { TAcademicDepartment } from './academicDepartment.interface';
-import { academicDepartmentModel } from './academiceDepartment.model';
+import { academicDepartment } from './academiceDepartment.model';
 
 const createAcademicDepartmentIntroDB = async (
   payload: TAcademicDepartment,
 ) => {
-  const result = await academicDepartmentModel.create(payload);
+  const result = await academicDepartment.create(payload);
   return result;
 };
 const getAllAcademicDepartmentFromDB = async () => {
-  const result = await academicDepartmentModel
-    .find()
-    .populate('academicFaculty');
+  const result = await academicDepartment.find().populate('academicFaculty');
   return result;
 };
 const getSingleAcademicDepartmentFromDB = async (payload: string) => {
-  const result = await academicDepartmentModel
-    .findById(payload)
+  console.log(payload);
+  const result = await academicDepartment
+    .findOne({ _id: payload })
     .populate('academicFaculty');
   return result;
 };
@@ -23,7 +22,7 @@ const updateAcademicDepartmentIntroDB = async (
   id: string,
   payload: Partial<TAcademicDepartment>,
 ) => {
-  const result = await academicDepartmentModel.findByIdAndUpdate(id, payload, {
+  const result = await academicDepartment.findByIdAndUpdate(id, payload, {
     new: true,
     runValidators: true,
   });
