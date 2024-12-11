@@ -6,14 +6,11 @@ import validation from '../../middleware/validateRequest';
 const router = express.Router();
 
 router.get(
-  '/get-semesters/:semesterId',
+  '/:semesterId',
   AcademicSemesterControllers.getSingleAcademicSemester,
 );
 
-router.get(
-  '/get-semesters',
-  AcademicSemesterControllers.getAllAcademicSemester,
-);
+router.get('/', AcademicSemesterControllers.getAllAcademicSemester);
 
 router.post(
   '/create-academic-semester',

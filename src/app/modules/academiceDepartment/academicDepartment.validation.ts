@@ -12,7 +12,7 @@ const createAcademicDepartmentValidation = z.object({
 const updateAcademicDepartmentValidation = z.object({
   body: z.object({
     name: z.string({ invalid_type_error: 'name must be a string' }).optional(),
-    academicFaculty: z.string(),
+    academicFaculty: z.string().optional()
   }),
 });
 

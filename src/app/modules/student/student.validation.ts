@@ -77,6 +77,7 @@ const CreateStudentValidationZodSchema = z.object({
         .string()
         .url({ message: 'Profile image must be a valid URI' })
         .optional(),
+      AcademicDepartment: z.string(),
       admissionSemester: z.string(),
     }),
   }),

@@ -96,6 +96,10 @@ const studentSchema = new Schema<TStudent, studentMethods>(
       required: [true, 'this data is required'],
     },
     profileImg: { type: 'string' },
+    AcademicDepartment: {
+      type: Schema.Types.ObjectId,
+      ref: 'academicDepartment',
+    },
     admissionSemester: {
       type: Schema.Types.ObjectId,
       ref: 'academicSemester',
