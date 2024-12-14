@@ -1,4 +1,5 @@
 import config from '../../config';
+import { AppError } from '../../Error/AppError';
 import { academicSemester } from '../academicSemester/academicModel';
 import { TStudent } from '../student/student.interface';
 import { student } from '../student/student.model';
@@ -8,7 +9,7 @@ import { generateStudentId } from './user.utils';
 
 const createStudentIntoDB = async (password: string, payload: TStudent) => {
   // if (await std.isUserExists(studentData.id)) {
-  //   throw new Error('student is already exists ');
+  //   throw new AppError('student is already exists ');
   // }
   const userData: Partial<Tuser> = {};
   //if have pass then use if hav'nt then use default pass
@@ -23,7 +24,7 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
 
   // Check if `admissionSemester` exists
   if (!admissionSemester) {
-    throw new Error('Admission semester not found');
+    throw new AppError(404, 'Admission semester not found');
   }
 
   userData.id = await generateStudentId(admissionSemester);

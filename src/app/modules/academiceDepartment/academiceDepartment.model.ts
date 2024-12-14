@@ -1,5 +1,6 @@
 import mongoose, { model, Schema } from 'mongoose';
 import { TAcademicDepartment } from './academicDepartment.interface';
+import { AppError } from '../../Error/AppError';
 
 const academicDepartmentSchemaModel = new Schema<TAcademicDepartment>({
   name: {
@@ -17,7 +18,7 @@ academicDepartmentSchemaModel.pre('save', async function (next) {
     name: this.name,
   });
   if (isExistDepartmentName) {
-    throw new Error('Department name is Already exist ');
+    throw new AppError(400, 'Department name is Already exist ');
   }
   next();
 });
@@ -29,7 +30,7 @@ academicDepartmentSchemaModel.pre('findOne', async function (next) {
     _id: id,
   });
   if (!isExistDepartment) {
-    throw new Error('Department is empty ');
+    throw new AppError(400, 'Department is empty ');
   }
   next();
 });
@@ -39,7 +40,7 @@ academicDepartmentSchemaModel.pre('findOneAndUpdate', async function (next) {
   const id = new mongoose.Types.ObjectId(query._id);
   const isExistDepartment = await this.model.collection.findOne({ _id: id });
   if (!isExistDepartment) {
-    throw new Error("Department is does'nt exist");
+    throw new AppError(400, "Department is does'nt exist");
   }
   next();
 });

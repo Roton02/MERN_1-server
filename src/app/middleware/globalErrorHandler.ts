@@ -9,7 +9,7 @@ const globalErrHandler = (
   res: Record<string, any>,
   next: NextFunction,
 ) => {
-  return res.status(500).json({
+  return res.status(err.statusCode || 500).json({
     success: false,
     message: err.message || 'something went wrong',
     error: err,

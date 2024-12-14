@@ -1,10 +1,11 @@
+import { AppError } from '../../Error/AppError';
 import TAcademicSemester from './academicInterface';
 import { academicSemester } from './academicModel';
 import { academicSemesterNameCode } from './academicSemester.const';
 
 const createAcademicSemesterIntoDB = async (payload: TAcademicSemester) => {
   if (academicSemesterNameCode[payload.name] !== payload.code) {
-    throw new Error('Semester  code is wrong ');
+    throw new AppError(httpStatus.NOT_FOUND, 'Semester  code is wrong ');
   }
 
   const result = await academicSemester.create(payload);
@@ -28,7 +29,7 @@ const updateAcademicSemesterIntroDB = async (
     payload.code &&
     academicSemesterNameCode[payload.name] !== payload.code
   ) {
-    throw new Error('Invalid semester code ');
+    throw new AppError(404, 'Invalid semester code ');
   }
   const result = await academicSemester.findByIdAndUpdate(id, payload, {
     new: true,

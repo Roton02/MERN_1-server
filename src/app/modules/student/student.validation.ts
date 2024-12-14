@@ -52,7 +52,7 @@ const CreateStudentValidationZodSchema = z.object({
       // .refine(async (email) => {
       //   const existingEmail = await student.findOne({ email: email });
       //   if (existingEmail) {
-      //     throw new Error('email is exist already ');
+      //     throw new AppError(400 ,'email is exist already ');
       //   }
       // }),
       contactNo: z
