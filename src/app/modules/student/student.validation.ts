@@ -2,10 +2,7 @@ import { z } from 'zod';
 
 // User Name Validation Schema
 const UserNameValidationSchema = z.object({
-  firstName: z
-    .string()
-    .min(1, { message: 'First name is required' })
-    .regex(/^[A-Z][a-z]*$/, { message: `{value} is not capitalized` }),
+  firstName: z.string().min(1, { message: 'First name is required' }),
   middleName: z.string().optional(),
   lastName: z.string().min(1, { message: 'Last name is required' }),
 });

@@ -1,3 +1,8 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
+import mongoose from 'mongoose';
 import config from '../../config';
 import { AppError } from '../../Error/AppError';
 import { academicSemester } from '../academicSemester/academicModel';
@@ -8,35 +13,39 @@ import user from './user.model';
 import { generateStudentId } from './user.utils';
 
 const createStudentIntoDB = async (password: string, payload: TStudent) => {
-  // if (await std.isUserExists(studentData.id)) {
-  //   throw new AppError('student is already exists ');
-  // }
   const userData: Partial<Tuser> = {};
-  //if have pass then use if hav'nt then use default pass
   userData.password = password || (config.default_password as string);
-  //set role
   userData.role = 'student';
-  //set generator id
 
   const admissionSemester = await academicSemester.findById(
     payload.admissionSemester,
   );
-
-  // Check if `admissionSemester` exists
   if (!admissionSemester) {
     throw new AppError(404, 'Admission semester not found');
   }
+  const session = await mongoose.startSession();
+  try {
+    session.startTransaction();
+    userData.id = await generateStudentId(admissionSemester);
 
-  userData.id = await generateStudentId(admissionSemester);
+    //create a student
+    const newUser = await user.create([userData], { session });
+    if (!newUser.length) {
+      throw new AppError(400, 'Failed to create user');
+    }
 
-  //create a student
-  const newUser = await user.create(userData);
-  if (Object.keys(newUser).length) {
-    payload.id = newUser.id;
-    payload.user = newUser._id;
-
-    const result = await student.create(payload);
-    return result;
+    payload.id = newUser[0].id;
+    payload.user = newUser[0]._id;
+    const newStudent = await student.create([payload], { session });
+    if (!newStudent.length) {
+      throw new AppError(400, 'Failed to create student');
+    }
+    await session.commitTransaction();
+    await session.endSession();
+    return newStudent;
+  } catch (error: any) {
+    await session.abortTransaction();
+    await session.endSession();
   }
 };
 
