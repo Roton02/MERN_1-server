@@ -1,4 +1,10 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { startSession } from 'mongoose';
 import { student } from './student.model';
+import { AppError } from '../../Error/AppError';
+import user from '../user/user.model';
 
 //get all student
 const getAllStudentFromDB = async () => {
@@ -26,8 +32,33 @@ const getAStudentByStudentId = async (studentId: string) => {
 };
 
 const deleteStudentFromDB = async (id: string) => {
-  const result = await student.updateOne({ id }, { isDeleted: true });
-  return result;
+  const session = await startSession();
+  try {
+    session.startTransaction();
+    const isDeletedStudent = await student.findOneAndUpdate(
+      { id },
+      { isDeleted: true },
+      { new: true, session },
+    );
+    if (!isDeletedStudent) {
+      throw new AppError(400, 'student is filed to  deleted ');
+    }
+    const isDeletedUser = await user.findOneAndUpdate(
+      { id },
+      { isDeleted: true },
+      { new: true, session },
+    );
+    if (!isDeletedUser) {
+      throw new AppError(400, 'user is failed to delete ');
+    }
+    await session.commitTransaction();
+    await session.endSession();
+    return isDeletedUser;
+  } catch (error: any) {
+    await session.abortTransaction();
+    await session.endSession();
+    throw new AppError(404, 'does not delete ');
+  }
 };
 
 export const studentService = {

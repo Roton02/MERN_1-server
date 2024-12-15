@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import mongoose, { Schema, model } from 'mongoose';
 import {
   TStudent,
   TUserName,
@@ -7,6 +7,7 @@ import {
   studentMethods,
   studentModel,
 } from './student.interface';
+import { AppError } from '../../Error/AppError';
 
 const UserNameSchema = new Schema<TUserName>({
   firstName: {
@@ -141,6 +142,17 @@ studentSchema.pre('findOne', async function (next) {
   // this.where({ isDeleted: false });
   this.find({ isDeleted: { $ne: true } });
 
+  next();
+});
+studentSchema.pre('findOne', async function (next) {
+  const query = this.getQuery();
+  const id = new mongoose.Types.ObjectId(query._id);
+  const isExistDepartment = await this.model.collection.findOne({
+    id: id,
+  });
+  if (!isExistDepartment) {
+    throw new AppError(400, 'Student is empty ');
+  }
   next();
 });
 

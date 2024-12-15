@@ -8,8 +8,7 @@ type TResponse<T> = {
 };
 
 const sendResponse = <T>(res: Response, data: TResponse<T>) => {
-  res.status(200).json({
-    status: data.statusCode,
+  res.status(data.statusCode).json({
     success: data.success,
     message: data.message,
     data: data.data,
