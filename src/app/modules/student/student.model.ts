@@ -156,6 +156,17 @@ studentSchema.pre('findOne', async function (next) {
   next();
 });
 
+// studentSchema.pre('findOneAndUpdate', async function (next) {
+//   const { id } = this.getQuery();
+//   console.log(id);
+//   const isExistStudent = await this.model.collection.findOne({ id });
+//   if (!isExistStudent) {
+//     throw new AppError(400, 'student does not exist in database ');
+//   }
+//   console.log('isExistStudent is ', isExistStudent);
+//   next();
+// });
+
 studentSchema.virtual('fullName').get(function () {
   return `${this.name.firstName} ${this.name.middleName || ''} ${this.name.lastName}`;
 });

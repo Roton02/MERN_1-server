@@ -5,6 +5,7 @@ import { startSession } from 'mongoose';
 import { student } from './student.model';
 import { AppError } from '../../Error/AppError';
 import user from '../user/user.model';
+import { TStudent, TLocalGuardian } from './student.interface';
 
 //get all student
 const getAllStudentFromDB = async () => {
@@ -28,6 +29,41 @@ const getAStudentByStudentId = async (studentId: string) => {
       path: 'AcademicDepartment',
       populate: { path: 'academicFaculty' },
     });
+  return result;
+};
+const UpdateStudentIntoDB = async (
+  studentId: string,
+  payload: Partial<TStudent>,
+) => {
+  const { name, guardian, localGuardian, ...remainingStudentData } = payload;
+  const modifiedStudentData: Record<string, unknown> = {
+    ...remainingStudentData,
+  };
+
+  if (name && Object.keys(name).length) {
+    for (const [key, value] of Object.entries(name)) {
+      modifiedStudentData[`name.${key}`] = value;
+    }
+  }
+  if (guardian && Object.keys(guardian).length) {
+    for (const [key, value] of Object.entries(guardian)) {
+      modifiedStudentData[`guardian.${key}`] = value;
+    }
+  }
+  if (localGuardian && Object.keys(localGuardian).length) {
+    for (const [key, value] of Object.entries(localGuardian)) {
+      modifiedStudentData[`localGuardian.${key}`] = value;
+    }
+  }
+
+  const result = await student.findOneAndUpdate(
+    { id: studentId },
+    modifiedStudentData,
+    {
+      new: true,
+      runValidators: true,
+    },
+  );
   return result;
 };
 
@@ -57,7 +93,7 @@ const deleteStudentFromDB = async (id: string) => {
   } catch (error: any) {
     await session.abortTransaction();
     await session.endSession();
-    throw new AppError(404, "does not  delete student  ");
+    throw new AppError(404, 'does not  delete student  ');
   }
 };
 
@@ -65,4 +101,5 @@ export const studentService = {
   getAllStudentFromDB,
   getAStudentByStudentId,
   deleteStudentFromDB,
+  UpdateStudentIntoDB,
 };
