@@ -5,7 +5,7 @@ import { academicSemesterNameCode } from './academicSemester.const';
 
 const createAcademicSemesterIntoDB = async (payload: TAcademicSemester) => {
   if (academicSemesterNameCode[payload.name] !== payload.code) {
-    throw new AppError(httpStatus.NOT_FOUND, 'Semester  code is wrong ');
+    throw new AppError(404, 'Semester  code is wrong ');
   }
 
   const result = await academicSemester.create(payload);

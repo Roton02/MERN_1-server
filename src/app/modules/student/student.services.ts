@@ -93,7 +93,7 @@ const deleteStudentFromDB = async (id: string) => {
   } catch (error: any) {
     await session.abortTransaction();
     await session.endSession();
-    throw new AppError(404, 'does not  delete student  ');
+    throw error
   }
 };
 

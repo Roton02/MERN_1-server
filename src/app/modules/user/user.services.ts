@@ -30,7 +30,7 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
 
     //create a student
     const newUser = await user.create([userData], { session });
-    console.log(newUser);
+    // console.log('newUser', newUser);
     if (!newUser.length) {
       throw new AppError(400, 'Failed to create user');
     }
@@ -38,7 +38,7 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
     payload.id = newUser[0].id;
     payload.user = newUser[0]._id;
     const newStudent = await student.create([payload], { session });
-    console.log('newStudent' ,newStudent);
+    // console.log('newStudent' ,newStudent);
     if (!newStudent.length) {
       throw new AppError(400, 'Failed to create student');
     }
