@@ -14,6 +14,8 @@ import { zodErrorHandler } from '../Error/zodErrorHandler';
 import mongooseErrorsHandler from '../Error/mongooseErrorHandler';
 import TerrorSources from '../interface/error';
 import CastErrorHandler from '../Error/CastErrorHandler';
+import DuplicateIDErrorHandler from '../Error/DuplicateIDErrorHandler';
+import { AppError } from '../Error/AppError';
 
 const globalErrHandler: ErrorRequestHandler = (err, req, res, next) => {
   let statusCode = err.statusCode;
@@ -41,6 +43,30 @@ const globalErrHandler: ErrorRequestHandler = (err, req, res, next) => {
     statusCode = simplifiedError.statusCode;
     message = simplifiedError.message;
     errorSources = simplifiedError.errorSources;
+  } else if (err.code === 11000) {
+    const simplifiedError = DuplicateIDErrorHandler(err);
+    statusCode = simplifiedError.statusCode;
+    message = simplifiedError.message;
+    errorSources = simplifiedError.errorSources;
+  } else if (err instanceof AppError) {
+    const simplifiedError = DuplicateIDErrorHandler(err);
+    statusCode = err.statusCode;
+    message = err.message;
+    errorSources = [
+      {
+        path: '',
+        message: err.message,
+      },
+    ];
+  } else if (err instanceof Error) {
+    const simplifiedError = DuplicateIDErrorHandler(err);
+    message = err.message;
+    errorSources = [
+      {
+        path: '',
+        message: err.message,
+      },
+    ];
   }
 
   res.status(statusCode || 500).json({

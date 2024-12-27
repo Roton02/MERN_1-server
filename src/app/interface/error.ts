@@ -1,5 +1,5 @@
 type TerrorSources = {
-  path: string | number;
+  path: string | number | '';
   message: string;
 }[];
 

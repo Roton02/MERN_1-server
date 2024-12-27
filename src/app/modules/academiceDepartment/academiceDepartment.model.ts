@@ -6,6 +6,7 @@ const academicDepartmentSchemaModel = new Schema<TAcademicDepartment>({
   name: {
     type: String,
     required: true,
+    unique: true,
   },
   academicFaculty: {
     type: Schema.Types.ObjectId,
@@ -23,17 +24,17 @@ academicDepartmentSchemaModel.pre('save', async function (next) {
   next();
 });
 
-academicDepartmentSchemaModel.pre('findOne', async function (next) {
-  const query = this.getQuery();
-  const id = new mongoose.Types.ObjectId(query._id);
-  const isExistDepartment = await this.model.collection.findOne({
-    _id: id,
-  });
-  if (!isExistDepartment) {
-    throw new AppError(400, 'Department is empty ');
-  }
-  next();
-});
+// academicDepartmentSchemaModel.pre('findOne', async function (next) {
+//   const query = this.getQuery();
+//   const id = new mongoose.Types.ObjectId(query._id);
+//   const isExistDepartment = await this.model.collection.findOne({
+//     _id: id,
+//   });
+//   if (!isExistDepartment) {
+//     throw new AppError(400, 'Department is empty ');
+//   }
+//   next();
+// });
 
 academicDepartmentSchemaModel.pre('findOneAndUpdate', async function (next) {
   const query = this.getQuery();
