@@ -18,7 +18,23 @@ const createStudent = catchAsync(
     });
   },
 );
-const getStudent = catchAsync(
+const createFaculty = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { password, faculty: facultyData } = req.body;
+    const result = await userServices.createFacultyIntroDB(
+      password,
+      facultyData,
+    );
+    sendResponse(res, {
+      statusCode: 200,
+      success: true,
+      message: 'Faculty create Successfully ',
+      data: result,
+    });
+  },
+);
+
+const getUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const result = await userServices.getUsers();
     sendResponse(res, {
@@ -32,5 +48,6 @@ const getStudent = catchAsync(
 
 export const userControllers = {
   createStudent,
-  getStudent,
+  getUser,
+  createFaculty,
 };
