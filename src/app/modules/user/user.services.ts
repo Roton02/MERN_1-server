@@ -75,6 +75,7 @@ const createFacultyIntroDB = async (password: string, payload: TFaculty) => {
   try {
     session.startTransaction();
     userData.id = await generateFacultyId();
+    console.log(userData.id);
 
     const newUser = await user.create([userData], { session });
     if (!newUser.length) {
@@ -91,6 +92,7 @@ const createFacultyIntroDB = async (password: string, payload: TFaculty) => {
     session.endSession();
     return newFaculty;
   } catch (error: any) {
+    console.log(error);
     session.abortTransaction();
     session.endSession();
     throw new AppError(404, 'Faculty creation failed ');

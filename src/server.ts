@@ -32,6 +32,8 @@ process.on('uncaughtException', () => {
   console.log(' uncaughtException dore pelsi mamma  ');
   process.exit(1);
 });
+// Promise.reject()
 
 
-// promise.reject()
+
+

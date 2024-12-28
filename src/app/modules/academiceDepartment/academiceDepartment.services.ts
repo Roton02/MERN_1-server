@@ -5,6 +5,7 @@ const createAcademicDepartmentIntroDB = async (
   payload: TAcademicDepartment,
 ) => {
   const result = await academicDepartment.create(payload);
+  console.log(result);
   return result;
 };
 const getAllAcademicDepartmentFromDB = async () => {
@@ -14,7 +15,7 @@ const getAllAcademicDepartmentFromDB = async () => {
 const getSingleAcademicDepartmentFromDB = async (payload: string) => {
   console.log(payload);
   const result = await academicDepartment
-    .findOne({ _id: payload })
+    .findOneAndUpdate({ _id: payload })
     .populate('academicFaculty');
   return result;
 };

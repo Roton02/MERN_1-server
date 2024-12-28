@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import queryBuilder from '../../QueryBuilder/QueryBuilder';
 import { FacultySearchableFields } from './faculty.const';
 import { TFaculty } from './faculty.interface';
@@ -14,6 +15,7 @@ const getAllFacultyFromDB = async (query: Record<string, unknown>) => {
     .paginate()
     .fields();
   const result = await facultyQuery.queryModel;
+  console.log(result);
   return result;
 };
 
@@ -27,6 +29,11 @@ const updateFacultyIntoDB = async (id: string, payload: TFaculty) => {
   const modifiedUpdatedData: Record<string, unknown> = {
     ...remainingFacultyData,
   };
+  if (name && Object.keys(name).length > 0) {
+    for (const [key, value] of Object.entries(name)) {
+      modifiedUpdatedData[`name.${key}`] = value;
+    }
+  }
   const result = await Faculty.findByIdAndUpdate(id, modifiedUpdatedData, {
     new: true,
     runValidators: true,
@@ -34,9 +41,16 @@ const updateFacultyIntoDB = async (id: string, payload: TFaculty) => {
   return result;
 };
 const deleteFacultyFromDB = async (id: string) => {
-  const result = await Faculty.findById(id).populate('academicDepartment');
+//   const facultyId = id; 
+//   const session = mongoose.startSession()
+//   try {
+//    await session.startTransaction()
+    
+//   } catch (error :any) {
+//     //
+//   }
 
-  return result;
+//   return {};
 };
 export const facultyServices = {
   getAllFacultyFromDB,
