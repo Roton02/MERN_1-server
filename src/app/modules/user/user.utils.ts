@@ -63,5 +63,6 @@ export const generateFacultyId = async () => {
   }
   let increment = (Number(currentId) + 1).toString().padStart(4, '0');
   increment = `F-${increment}`;
+  console.log(increment);
   return increment;
 };
