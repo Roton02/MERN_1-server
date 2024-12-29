@@ -65,10 +65,10 @@ const createFacultyIntroDB = async (password: string, payload: TFaculty) => {
   userData.password = password || (config.default_password as string);
   userData.role = 'faculty';
 
-  const admissionSemester = await academicDepartment.findById(
+  const department = await academicDepartment.findById(
     payload.academicDepartment,
   );
-  if (!admissionSemester) {
+  if (!department) {
     throw new AppError(404, 'academic department not found');
   }
   const session = await mongoose.startSession();
@@ -84,7 +84,7 @@ const createFacultyIntroDB = async (password: string, payload: TFaculty) => {
     payload.id = newUser[0].id;
     payload.user = newUser[0]._id;
 
-    const newFaculty = await Faculty.create(payload);
+    const newFaculty = await Faculty.create([payload], {session});
     if (!newFaculty) {
       throw new AppError(400, 'Failed to create user');
     }

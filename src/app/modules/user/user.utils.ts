@@ -58,6 +58,7 @@ export const generateStudentId = async (payload: TAcademicSemester) => {
 export const generateFacultyId = async () => {
   let currentId = (0).toString();
   const lastFacultyId = await findLastFacultyId();
+  console.log({lastFacultyId});
   if (lastFacultyId) {
     currentId = lastFacultyId.substring(2);
   }

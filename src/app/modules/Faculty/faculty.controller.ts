@@ -10,7 +10,7 @@ const getSingleFaculty = catchAsync(async (req, res) => {
   const result = await facultyServices.getSingleFacultyFromDB(id);
 
   sendResponse(res, {
-    statusCode: httpStatus.OK,
+    statusCode: 200,
     success: true,
     message: 'Faculty is retrieved successfully',
     data: result,
@@ -36,7 +36,7 @@ const updateFaculty = catchAsync(async (req, res) => {
   const result = await facultyServices.updateFacultyIntoDB(id, faculty);
 
   sendResponse(res, {
-    statusCode: httpStatus.OK,
+    statusCode: 200,
     success: true,
     message: 'Faculty is updated successfully',
     data: result,
@@ -48,7 +48,7 @@ const deleteFaculty = catchAsync(async (req, res) => {
   const result = await facultyServices.deleteFacultyFromDB(id);
 
   sendResponse(res, {
-    statusCode: httpStatus.OK,
+    statusCode: 200,
     success: true,
     message: 'Faculty is deleted successfully',
     data: result,
@@ -56,4 +56,7 @@ const deleteFaculty = catchAsync(async (req, res) => {
 });
 export const FacultyControllers = {
   getAllFaculty,
+  getSingleFaculty,
+  updateFaculty,
+  deleteFaculty,
 };
