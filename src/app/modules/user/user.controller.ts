@@ -6,6 +6,18 @@ import { userServices } from './user.services';
 import sendResponse from '../../utils/sendResponse';
 import catchAsync from '../../utils/catchAsync';
 
+const getUser = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const result = await userServices.getUsers();
+    sendResponse(res, {
+      statusCode: 200,
+      success: true,
+      message: 'Student create Successfully ',
+      data: result,
+    });
+  },
+);
+
 const createStudent = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { password, student } = req.body;
@@ -33,21 +45,22 @@ const createFaculty = catchAsync(
     });
   },
 );
+const createAdmin = catchAsync(async (req, res) => {
+  const { password, admin: adminData } = req.body;
 
-const getUser = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const result = await userServices.getUsers();
-    sendResponse(res, {
-      statusCode: 200,
-      success: true,
-      message: 'Student create Successfully ',
-      data: result,
-    });
-  },
-);
+  const result = await userServices.createAdminIntoDB(password, adminData);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Admin is created succesfully',
+    data: result,
+  });
+});
 
 export const userControllers = {
   createStudent,
   getUser,
   createFaculty,
+  createAdmin,
 };
