@@ -73,7 +73,7 @@ const getAllStudentFromDB = async (query: Record<string, unknown>) => {
 
 const getAStudentByStudentId = async (studentId: string) => {
   const result = await student
-    .findOne({ id: studentId })
+    .findById(studentId)
     .populate('admissionSemester')
     .populate({
       path: 'AcademicDepartment',
@@ -106,8 +106,8 @@ const UpdateStudentIntoDB = async (
     }
   }
 
-  const result = await student.findOneAndUpdate(
-    { id: studentId },
+  const result = await student.findByIdAndUpdate(
+    studentId,
     modifiedStudentData,
     {
       new: true,
@@ -121,16 +121,16 @@ const deleteStudentFromDB = async (id: string) => {
   const session = await startSession();
   try {
     session.startTransaction();
-    const isDeletedStudent = await student.findOneAndUpdate(
-      { id },
+    const isDeletedStudent = await student.findByIdAndUpdate(
+      id,
       { isDeleted: true },
       { new: true, session },
     );
     if (!isDeletedStudent) {
       throw new AppError(400, 'student is filed to  deleted ');
     }
-    const isDeletedUser = await user.findOneAndUpdate(
-      { id },
+    const isDeletedUser = await user.findByIdAndUpdate(
+      id,
       { isDeleted: true },
       { new: true, session },
     );
