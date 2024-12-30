@@ -6,12 +6,12 @@ import { StudentValidationZodSchemas } from './student.validation';
 const router = express.Router();
 
 router.get('/', studentControllers.getStudentController);
-router.get('/:studentId', studentControllers.getAStudentByStudentId);
+router.get('/:id', studentControllers.getAStudentByStudentId);
 router.patch(
-  '/:studentId',
+  '/:id',
   validation(StudentValidationZodSchemas.UpdateStudentValidationZodSchema),
   studentControllers.UpdateStudent,
 );
-router.delete('/:studentId', studentControllers.deleteStudent);
+router.delete('/:id', studentControllers.deleteStudent);
 
 export const studentRouter = router;

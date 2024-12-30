@@ -29,7 +29,7 @@ const getAStudentByStudentId = catchAsync(
 );
 
 const UpdateStudent = catchAsync(async (req: Request, res: Response) => {
-  const id = req.params.studentId;
+  const id = req.params.id;
   const { student } = req.body;
   console.log(id, student);
   const result = await studentService.UpdateStudentIntoDB(id, student);
@@ -42,7 +42,7 @@ const UpdateStudent = catchAsync(async (req: Request, res: Response) => {
   });
 });
 const deleteStudent = catchAsync(async (req: Request, res: Response) => {
-  const id = req.params.studentId;
+  const id = req.params.id;
   const result = await studentService.deleteStudentFromDB(id);
 
   sendResponse(res, {
