@@ -51,7 +51,7 @@ const updateCourseIntoDB = async (id: string, payload: Partial<TCourse>) => {
     if (!updatedBasicCourseInfo) {
       throw new AppError(httpStatus.BAD_REQUEST, 'Failed to update course!');
     }
-
+//make contribute in github 
     if (preRequisiteCourses && preRequisiteCourses?.length > 0) {
       const deletedPreRequisites = preRequisiteCourses
         ?.filter((el) => el.course && el.isDeleted)
