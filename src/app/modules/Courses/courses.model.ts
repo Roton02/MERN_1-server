@@ -52,6 +52,9 @@ const courseSchema = new Schema<TCourse>(
   },
 );
 
+
+//ajdacksjcn
+
 export const Course = model<TCourse>('Course', courseSchema);
 
 const courseFacultySchema = new Schema<TCoursefaculty>({
