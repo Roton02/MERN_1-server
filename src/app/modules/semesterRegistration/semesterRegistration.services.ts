@@ -16,11 +16,13 @@ const createSemesterRegistrationIntoDB = async (
   const isAcademicSemesterExists =
     await academicSemester.findById(academicsemester);
   if (!isAcademicSemesterExists) {
+    console.log('object.academicSemester');
     throw new AppError(404, 'Academic semester not found')
   }
 
-    const isAcademicSemesterAlreadyExists = await SemesterRegistration.findOne(academicsemester)
+    const isAcademicSemesterAlreadyExists = await SemesterRegistration.findOne({academicsemester})
     if(isAcademicSemesterAlreadyExists){
+      console.log('object');
         throw new AppError(400, 'Semester is already registered')
     }
 

@@ -6,3 +6,5 @@ export type Tuser = {
   status: 'in-progress' | 'blocked';
   isDeleted: boolean;
 };
+
+// Path: src/app/modules/user/user.interface.ts
