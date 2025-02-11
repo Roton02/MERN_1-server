@@ -105,7 +105,7 @@ const createAdminIntoDB = async (password: string, payload: TFaculty) => {
   // create a user object
   const userData: Partial<Tuser> = {};
 
-  //if password is not given , use deafult password
+  //if password is not given , use deafult password // 
   userData.password = password || (config.default_password as string);
 
   //set student roles
